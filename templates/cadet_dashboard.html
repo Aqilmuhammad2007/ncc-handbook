@@ -8,8 +8,9 @@
     <p>Institution: {{ cadet.college }}</p>
 
     <ul>
-        <li><a href="#">Leaderboard</a></li>
-        <li><a href="#">Available Quizzes</a></li>
+        <li><a href="/leaderboard">Leaderboard</a></li>
+        <li><a href="/cadet/quizzes/{{ cadet_phone }}">Available Quizzes</a></li>
+
         <li><a href="/">Logout</a></li>
     </ul>
 </body>
