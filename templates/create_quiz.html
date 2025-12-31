@@ -10,56 +10,44 @@
         <label>Quiz Name:</label><br>
         <input type="text" name="quiz_name" required><br><br>
 
-        <label>Question 1:</label><br>
-        <input type="text" name="q1" required><br>
-        <label>Answer 1:</label><br>
-        <input type="text" name="a1" required><br><br>
+        <label>Total Questions:</label><br>
+        <input type="number" id="total" name="total" min="1" required><br><br>
 
-        <label>Question 2:</label><br>
-        <input type="text" name="q2"><br>
-        <label>Answer 2:</label><br>
-        <input type="text" name="a2"><br><br>
-<label>Question 2:</label><br>
-        <input type="text" name="q2"><br>
-        <label>Answer 2:</label><br>
-        <input type="text" name="a2"><br><br>
-<label>Question 3:</label><br>
-        <input type="text" name="q3"><br>
-        <label>Answer 3:</label><br>
-        <input type="text" name="a3"><br><br>
-<label>Question 4:</label><br>
-        <input type="text" name="q4"><br>
-        <label>Answer 4:</label><br>
-        <input type="text" name="a4"><br><br>
-<label>Question 5:</label><br>
-        <input type="text" name="q5"><br>
-        <label>Answer 5:</label><br>
-        <input type="text" name="a5"><br><br>
-<label>Question 6:</label><br>
-        <input type="text" name="q6"><br>
-        <label>Answer 6:</label><br>
-        <input type="text" name="a6"><br><br>
-<label>Question 7:</label><br>
-        <input type="text" name="q7"><br>
-        <label>Answer 7:</label><br>
-        <input type="text" name="a7"><br><br>
-<label>Question 8:</label><br>
-        <input type="text" name="q8"><br>
-        <label>Answer 8:</label><br>
-        <input type="text" name="a8"><br><br>
-<label>Question 9:</label><br>
-        <input type="text" name="q9"><br>
-        <label>Answer 9:</label><br>
-        <input type="text" name="a9"><br><br>
-<label>Question 10:</label><br>
-        <input type="text" name="q10"><br>
-        <label>Answer 10:</label><br>
-        <input type="text" name="a10"><br><br>
-
-
-        <input type="hidden" name="total" value="2">
+        <div id="questions"></div>
 
         <button type="submit">Create Quiz</button>
     </form>
+
+    <script>
+        const totalInput = document.getElementById("total");
+        const container = document.getElementById("questions");
+
+        totalInput.addEventListener("change", () => {
+            container.innerHTML = "";
+            const total = parseInt(totalInput.value);
+
+            for (let i = 1; i <= total; i++) {
+                container.innerHTML += `
+                    <hr>
+                    <h4>Question ${i}</h4>
+                    <input name="q${i}" placeholder="Enter question" required><br><br>
+
+                    A) <input name="q${i}a" required><br>
+                    B) <input name="q${i}b" required><br>
+                    C) <input name="q${i}c" required><br>
+                    D) <input name="q${i}d" required><br><br>
+
+                    Correct Option:
+                    <select name="q${i}correct" required>
+                        <option value="">--Select--</option>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                        <option>D</option>
+                    </select><br><br>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>

@@ -75,24 +75,34 @@ def create_quiz_page(phone):
         quiz_name = request.form.get("quiz_name")
         total = int(request.form.get("total"))
 
-        questions, answers = [], []
+        questions = []
+
         for i in range(1, total + 1):
             q = request.form.get(f"q{i}")
-            a = request.form.get(f"a{i}").strip().lower()
-            questions.append(q)
-            answers.append(a)
+            options = [
+                request.form.get(f"q{i}a"),
+                request.form.get(f"q{i}b"),
+                request.form.get(f"q{i}c"),
+                request.form.get(f"q{i}d"),
+            ]
+            correct = request.form.get(f"q{i}correct").upper()
+
+            questions.append({
+                "q": q,
+                "options": options,
+                "correct": correct
+            })
 
         data["quizzes"].append({
             "institution": phone,
             "quiz_name": quiz_name,
-            "questions": questions,
-            "answers": answers
+            "questions": questions
         })
+
         save_data(data)
         return redirect(url_for("institution_dashboard", phone=phone))
 
     return render_template("create_quiz.html", phone=phone)
-
 # ---------------- CADET ----------------
 
 @app.route("/cadet/login", methods=["GET", "POST"])
@@ -141,15 +151,18 @@ def cadet_quizzes(phone):
 @app.route("/cadet/attempt/<phone>/<quiz_name>", methods=["GET", "POST"])
 def attempt_quiz(phone, quiz_name):
     quiz = next(q for q in data["quizzes"] if q["quiz_name"] == quiz_name)
+
     if request.method == "POST":
         score = 0
-        for i, correct in enumerate(quiz["answers"], start=1):
-            user_ans = request.form.get(f"a{i}", "").strip().lower()
-            if user_ans == correct:
+        for i, q in enumerate(quiz["questions"], start=1):
+            user_ans = request.form.get(f"a{i}")
+            if user_ans == q["correct"]:
                 score += 1
+
         data["cadets"][phone]["scores"][quiz_name] = score
         save_data(data)
         return redirect(url_for("cadet_dashboard", phone=phone))
+
     return render_template("attempt_quiz.html", quiz=quiz, cadet_phone=phone)
 
 # ---------------- LEADERBOARD ----------------
